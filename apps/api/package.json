@@ -1,0 +1,29 @@
+{
+  "name": "@pokerbotai/api",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "type-check": "tsc --noEmit",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate deploy",
+    "prisma:studio": "prisma studio"
+  },
+  "dependencies": {
+    "@pokerbotai/shared": "*",
+    "openai": "^4.47.1",
+    "@fastify/cors": "^8.5.0",
+    "@prisma/client": "^5.9.1",
+    "dotenv": "^16.4.1",
+    "fastify": "^4.26.0",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.5",
+    "prisma": "^5.9.1",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3"
+  }
+}

@@ -1,0 +1,13 @@
+[build]
+builder = "nixpacks"
+buildCommand = "npm install && npm run build && npx prisma generate && npx prisma migrate deploy"
+
+[deploy]
+startCommand = "node dist/index.js"
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 3
+
+[environments.production.variables]
+NODE_ENV = "production"
+API_PORT = "3001"
+API_HOST = "0.0.0.0"

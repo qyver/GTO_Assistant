@@ -1,0 +1,122 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model UserProfile {
+  id               String   @id @default(cuid())
+  telegramId       String   @unique
+  skillLevel       String   // beginner | intermediate | pro
+  formatPreference String   // cash | tournament | both
+  typicalStakes    String
+  mainGoal         String
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  rateLimits RateLimit[]
+  apiUsage   ApiUsage[]
+}
+
+model RateLimit {
+  id         String      @id @default(cuid())
+  userId     String
+  date       String      // YYYY-MM-DD
+  callCount  Int         @default(0)
+  user       UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt  DateTime    @default(now())
+
+  @@unique([userId, date])
+  @@index([userId, date])
+}
+
+model ClaudeCache {
+  id         String   @id @default(cuid())
+  cacheKey   String   @unique
+  promptType String   // gto_explain | hand_review | training_gen
+  request    String   // JSON
+  response   String   // JSON
+  createdAt  DateTime @default(now())
+  expiresAt  DateTime
+
+  @@index([cacheKey])
+  @@index([expiresAt])
+}
+
+// Analytics: tracks every module interaction (GTO spot, AI calls, errors)
+model AnalyticsEvent {
+  id         String   @id @default(cuid())
+  telegramId String?
+  event      String   // 'gto_spot' | 'gto_explain' | 'hand_analyze' | 'training_generate' | 'board_info'
+  module     String?  // 'gto' | 'hand' | 'training'
+  durationMs Int?     // response time in ms
+  isError    Boolean  @default(false)
+  errorMsg   String?
+  metadata   String?  // JSON extra data: { confidence, model, cached }
+  createdAt  DateTime @default(now())
+
+  @@index([event, createdAt])
+  @@index([telegramId, createdAt])
+  @@index([isError, createdAt])
+}
+
+// Cost tracking: per-call ChatGPT API token usage + estimated USD cost
+model ApiUsage {
+  id           String      @id @default(cuid())
+  userId       String
+  telegramId   String
+  promptType   String      // 'gto_explain' | 'hand_review' | 'training_gen'
+  model        String
+  inputTokens  Int
+  outputTokens Int
+  costUsd      Float       // estimated cost in USD
+  cached       Boolean     @default(false)
+  createdAt    DateTime    @default(now())
+
+  user UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([telegramId, createdAt])
+  @@index([createdAt])
+}
+
+// Session history: last 20 GTO/hand/training interactions per user
+model SessionHistory {
+  id         String   @id @default(cuid())
+  telegramId String
+  type       String   // 'gto_spot' | 'hand_analyze' | 'gto_explain'
+  title      String   // short display label
+  shareCode  String?  @unique  // optional public share slug
+  data       String   // JSON: compressed result snapshot
+  createdAt  DateTime @default(now())
+
+  @@index([telegramId, createdAt])
+  @@index([shareCode])
+}
+
+// Training leaderboard: cumulative drill scores per user
+model TrainingScore {
+  id           String   @id @default(cuid())
+  telegramId   String   @unique
+  displayName  String   @default("Anonymous")
+  totalDrills  Int      @default(0)
+  correctDrills Int     @default(0)
+  streak       Int      @default(0)
+  lastActive   DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([correctDrills])
+}
+
+// Notification preferences: daily drill reminder opt-in
+model NotificationPref {
+  id           String   @id @default(cuid())
+  telegramId   String   @unique
+  chatId       String   // Telegram chat ID for sending messages
+  enabled      Boolean  @default(true)
+  lastSent     DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
