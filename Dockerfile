@@ -24,10 +24,10 @@ RUN npm run build
 WORKDIR /app/apps/api
 RUN npm run build
 
-# Generate Prisma client and run migrations
+# Generate Prisma client (build-time, no DATABASE_URL needed)
 RUN npx prisma generate
-RUN npx prisma migrate deploy
 
 EXPOSE 3001
 
-CMD ["node", "dist/index.js"]
+# Run migrations at container startup, then start the server
+CMD ["sh", "-c", "npx prisma migrate deploy && node dist/index.js"]
