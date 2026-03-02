@@ -1,5 +1,7 @@
 # 🃏 PokerBotAi - AI Poker Coach
 
+🌐 **Website:** [pokerbotai.com](https://pokerbotai.com/)
+
 **PokerBotAi** is a production-ready Telegram Mini App that provides GTO poker coaching powered by Claude AI. It's a 100% free educational tool designed for player retention and acquisition, with a prominent upgrade CTA to your premium Real-Time Assistant.
 
 ---

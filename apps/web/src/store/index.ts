@@ -30,7 +30,7 @@ interface AppState {
 
 export const useAppStore = create<AppState>((set, get) => ({
   // Config
-  upgradeUrl: 'https://t.me/YourBot',
+  upgradeUrl: 'https://t.me/PokerBotAI_ShopBot',
   setUpgradeUrl: (url) => set({ upgradeUrl: url }),
 
   // User Profile

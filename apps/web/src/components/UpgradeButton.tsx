@@ -2,7 +2,7 @@ import { useAppStore } from '@/store';
 import { openTelegramLink, haptic } from '@/lib/telegram';
 
 export function UpgradeButton({ className = '' }: { className?: string }) {
-  const upgradeUrl = useAppStore((state) => state.upgradeUrl);
+  const upgradeUrl = useAppStore((state) => state.upgradeUrl) || 'https://t.me/PokerBotAI_ShopBot';
 
   const handleClick = () => {
     haptic.medium();
