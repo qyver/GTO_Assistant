@@ -1,5 +1,5 @@
 {
-  "buildCommand": "npm run build --workspace=packages/shared && npm run build --workspace=apps/web",
+  "buildCommand": "npm run build --workspace=@pokerbotai/shared && npm run build --workspace=@pokerbotai/web",
   "outputDirectory": "apps/web/dist",
   "installCommand": "npm install",
   "rewrites": [
