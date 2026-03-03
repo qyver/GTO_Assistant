@@ -40,9 +40,11 @@ async function main() {
 
   // Start server
   try {
+    // Railway requires '::' (dual-stack IPv4+IPv6) for Fastify
+    const host = config.nodeEnv === 'production' ? '::' : config.host;
     await fastify.listen({
       port: config.port,
-      host: config.host,
+      host,
     });
 
     console.log(`
