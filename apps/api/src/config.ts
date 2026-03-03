@@ -28,6 +28,10 @@ export const config = {
   // CORS – comma-separated list of allowed origins in production
   allowedOrigins: process.env.ALLOWED_ORIGINS || '',
 
+  // Public URLs
+  publicApiUrl: process.env.PUBLIC_API_URL || '',
+  webappUrl: process.env.WEBAPP_URL || '',
+
   // Rate Limiting
   rateLimitCallsPerDay: parseInt(process.env.RATE_LIMIT_CALLS_PER_DAY || '50', 10),
 

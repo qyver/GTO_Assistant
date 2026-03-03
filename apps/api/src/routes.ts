@@ -9,6 +9,7 @@ import { logEvent, logError } from './analytics';
 import { parseHandHistory } from './hand-parser';
 import { calculateEquity } from './equity-calc';
 import { sendTelegramMessage, buildDrillReminderMessage } from './notifications';
+import { handleTelegramUpdate } from './bot';
 import {
   GTOSpotQuerySchema,
   ExplainRequestSchema,
@@ -704,6 +705,19 @@ export async function registerRoutes(fastify: FastifyInstance) {
         reply.code(500).send({ success: false, error: 'Failed to fetch notification preference' });
       }
     },
+  });
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // Telegram Bot Webhook — handles /start and other bot commands
+  // ─────────────────────────────────────────────────────────────────────────────
+  fastify.post('/bot/webhook', async (request, reply) => {
+    try {
+      await handleTelegramUpdate(request.body);
+    } catch (err) {
+      console.error('[Bot] Webhook handler error:', err);
+    }
+    // Telegram expects 200 OK regardless of processing result
+    return { ok: true };
   });
 
   // Notifications — send daily drill to all opted-in users (admin-protected)

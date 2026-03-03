@@ -3,6 +3,7 @@ import cors from '@fastify/cors';
 import { config, validateConfig } from './config';
 import { registerRoutes } from './routes';
 import { prisma } from './db';
+import { setWebhook } from './bot';
 
 async function main() {
   // Validate configuration
@@ -57,6 +58,11 @@ async function main() {
 ║                                               ║
 ╚═══════════════════════════════════════════════╝
     `);
+
+    // Register Telegram bot webhook (non-blocking)
+    if (config.publicApiUrl) {
+      setWebhook(config.publicApiUrl).catch(() => {});
+    }
   } catch (err) {
     fastify.log.error(err);
     process.exit(1);
