@@ -1,5 +1,5 @@
 {
-  "buildCommand": "npm run build --workspace=@pokerbotai/shared && npm run build --workspace=@pokerbotai/web",
+  "buildCommand": "npm run build --workspace=@pokerbotai/shared && node_modules/.bin/vite build --root apps/web",
   "outputDirectory": "apps/web/dist",
   "installCommand": "rm -f package-lock.json && npm install",
   "rewrites": [
