@@ -1,7 +1,7 @@
 {
   "buildCommand": "npm run build --workspace=@pokerbotai/shared && node_modules/.bin/vite build --root apps/web",
   "outputDirectory": "apps/web/dist",
-  "installCommand": "rm -f package-lock.json && npm install",
+  "installCommand": "rm -f package-lock.json && npm install 2>&1 && echo '=== BIN DIR ===' && ls node_modules/.bin/ && echo '=== VITE PKG ===' && ls node_modules/vite/bin/ 2>/dev/null || echo 'NO VITE PACKAGE'",
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ],
