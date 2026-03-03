@@ -3,6 +3,8 @@ builder = "nixpacks"
 buildCommand = "npm install && npm run build --workspace=packages/shared && npm run build --workspace=apps/api && cd apps/api && npx prisma generate"
 
 [deploy]
-startCommand = "cd apps/api && npx prisma migrate deploy && node dist/index.js"
+startCommand = "echo PORT=$PORT && cd apps/api && npx prisma migrate deploy && node dist/index.js"
+healthcheckPath = "/health"
+healthcheckTimeout = 300
 restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 3
