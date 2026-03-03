@@ -1,7 +1,7 @@
 {
   "buildCommand": "npm run build --workspace=@pokerbotai/shared && npm run build --workspace=@pokerbotai/web",
   "outputDirectory": "apps/web/dist",
-  "installCommand": "npm install --include=dev",
+  "installCommand": "NODE_ENV=development npm ci",
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ],
